@@ -1,0 +1,98 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <!-- <div class="d-flex">
+      <p class="h5 flex-grow-1 pb-3">Point of Care</p>
+      <button
+        (click)="goToPointofcareMerge()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+        Define Point of Care
+      </button>
+    </div> -->
+    <div class="row no-gutters align-items-center">
+      <!-- <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="pointofcare_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_pointofcare_filter"
+        (change)="onPointofcareFilterChange($event)"
+      >
+      </ng-select> -->
+      <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="pointofcare_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        id="pointOfCareSelectedFilterButton"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_pointofcare_filter"
+        (change)="onPointofcareFilterChange($event)"
+      >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span [id]="'pointOfCare' + item.name"> {{ item.name }}</span>
+          <span
+            class="ng-value-icon right px-1"
+            (click)="clear(item)"
+            aria-hidden="true"
+            ><i class="fas fa-times-circle"></i
+          ></span>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          <span [id]="'pointOfCareOption' + item.name"> {{ item.name }}</span>
+        </ng-template>
+      </ng-select>
+      <div class="d-flex align-items-center">
+        <button
+          *ngIf="
+            selected_pointofcare_rows.length > 1 &&
+            user_permission_guard.hasCanManagePointofCarePermission()
+          "
+          mat-flat-button
+          color="warn"
+          class="mx-1"
+          id="pointOfCareActivateDeactivateButton"
+        >
+          {{
+            this.selected_pointofcare_filter.code == "ACTIVE" ||
+            this.selected_pointofcare_filter.code == "LOCKED"
+              ? "Deactivate"
+              : "Activate"
+          }}
+        </button>
+      </div>
+    </div>
+
+    <div id="pointofcare-list-grid-container" class="flex-grow-1 mt-3">
+      <!-- gridHeight="100%" -->
+      <angular-slickgrid
+        gridId="pointofcareGrid"
+        gridHeight="100%"
+        [columnDefinitions]="pointofcare_list_grid_column_definitions"
+        [gridOptions]="pointofcare_list_grid_options"
+        [dataset]="pointofcare_list_grid_dataset"
+        (sgOnCellChange)="
+          onPointofcareGridCellChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+        (onAngularGridCreated)="pointofcareListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          pointofcareListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

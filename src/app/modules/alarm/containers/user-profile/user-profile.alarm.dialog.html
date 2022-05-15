@@ -1,0 +1,129 @@
+<div>
+  <div class="d-flex">
+    <div class="flex-grow-1"></div>
+    <div>
+      <button
+        (click)="cancel()"
+        mat-mini-fab
+        color="primary"
+        data-toggle="tooltip"
+        title="Cancel"
+        id="userMergeCancelButton"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="d-flex flex-column justify-content-center align-items-center pt-4 pb-3 bg-light"
+  >
+    <label for="file">
+      <ng-container>
+        <img
+          src="assets/icons/default_profile.png"
+          class="avatar rounded-circle"
+        />
+      </ng-container>
+      <!-- <ng-template>
+      <img 
+        src="/assets/icons/user.png"
+        class="avatar rounded-circle"
+      />
+    </ng-template>   -->
+    </label>
+    <input
+      type="file"
+      id="file"
+      (change)="fileChangeEvent($event)"
+      class="d-none"
+    />
+    <p class="px-2 pt-3 text-center text-dark">
+      {{ user.initials + user.first_name }}
+    </p>
+    <p class="px-2 text-center small text-muted">{{ user.email }}</p>
+  </div>
+  <div class="border border-light text-muted px-3 py-2 my-1 small">
+    <p>Authentication Mode: {{app_settings.auth_mode}}</p>
+    <p>Logged in since : {{last_login}}</p>
+    <p>{{enterprise +" / "+location }}</p>
+  </div>
+  <div
+    *ngIf="app_settings.auth_mode != 'LDAP'"
+    class="d-flex p-3 align-items-center"
+    data-toggle="collapse"
+    href="#changePasswordCollapse"
+  >
+    <i class="fa fa-key text-primary mr-3" aria-hidden="true"></i>
+    <p class="pointer text-left">{{"Change password" | translate}}</p>
+  </div>
+
+  <!-- <span class="form-inline mx-1">
+  <select 
+      class="form-control mx-2" 
+      #selectedLang 
+      (change)="switchLang(selectedLang.value)">
+    <option *ngFor="let language of translate.getLangs()" 
+      [value]="language"
+      [selected]="language === translate.currentLang">
+      {{ language }}
+    </option>
+  </select>
+   
+  <p>{{"Switch Language" | translate}}</p>
+</span> -->
+
+  <div class="collapse mb-1" id="changePasswordCollapse">
+    <div class="card card-body">
+      <form #changePasswordForm="ngForm" class="d-flex flex-column">
+        <mat-form-field appearance="outline">
+          <mat-label>{{"Password" | translate}}</mat-label>
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            [(ngModel)]="change_password.password"
+            name="password"
+            required
+            #confirmPasswordCtrl="ngModel"
+            [customValidator]="validator_service.formConfirmPassword"
+          />
+          <mat-error
+            *ngIf="
+              !confirmPasswordCtrl.hasError('required') &&
+              confirmPasswordCtrl.hasError('mismatch')
+            "
+            >password mismatch</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input
+            type="password"
+            matInput
+            placeholder="Confirm Password"
+            [(ngModel)]="change_password.confirm_password"
+            name="confirm_password"
+            required
+            #confirmPasswordCtrl="ngModel"
+            [customValidator]="validator_service.formConfirmPassword"
+          />
+          <mat-error
+            *ngIf="
+              !confirmPasswordCtrl.hasError('required') &&
+              confirmPasswordCtrl.hasError('mismatch')
+            "
+            >password mismatch</mat-error
+          >
+        </mat-form-field>
+        <button
+          (click)="changePassword(changePasswordForm)"
+          mat-stroked-button
+          color="primary"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

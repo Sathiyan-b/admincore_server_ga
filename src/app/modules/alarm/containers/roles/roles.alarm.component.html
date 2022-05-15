@@ -1,0 +1,130 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex no-gutters">
+      <!-- <mat-icon svgIcon="role" class="custom-icon"></mat-icon>&nbsp;
+      <p class="h5 flex-grow-1">{{"Roles" | translate}}</p> -->
+      <!-- *ngIf="!is_ldap_mode && this.PermissFlag == 1"  -->
+
+      <!-- <button
+        (click)="goToRolerMerge()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+        {{"Create Role" | translate}}
+      </button> -->
+      <!-- <mat-icon svg1Icon="createrole" color="primary"></mat-icon> -->
+      <!-- <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="role_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_role_filter"
+        (change)="onUserFilterChange($event)"
+      >
+      </ng-select> -->
+      <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="role_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        id="roleSelectedFilterButton"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_role_filter"
+        (change)="onUserFilterChange($event)"
+      >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span [id]="'role' + item.name"> {{ item.name }}</span>
+          <span
+            class="ng-value-icon right px-1"
+            (click)="clear(item)"
+            aria-hidden="true"
+            ><i class="fas fa-times-circle"></i
+          ></span>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          <span [id]="'roleOption' + item.name"> {{ item.name }}</span>
+        </ng-template>
+      </ng-select>
+      <button
+        *ngIf="user_permission_guard.hasCanManageRoleProfilePermission()"
+        mat-mini-fab
+        color="primary"
+        (click)="goToRolerMerge()"
+        data-toggle="tooltip"
+        title="Create Role"
+        id="rolesAddButton"
+      >
+        <mat-icon svgIcon="create-role" class="custom-icon"></mat-icon>
+      </button>
+    </div>
+
+    <!-- <div class="row no-gutters align-items-center"> -->
+    <!-- <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="role_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_role_filter"
+        (change)="onUserFilterChange($event)"
+      >
+      </ng-select> -->
+    <!-- <div class="d-flex align-items-center">
+        <button
+          *ngIf="
+            selected_role_rows.length > 1 &&
+            (this.PermissFlag == 1 || this.PermissFlag == 2)
+          "
+          mat-flat-button
+          color="warn"
+          class="mx-1"
+          value="delete"
+        >
+          {{
+            this.selected_role_filter.code == "ACTIVE"
+              ? "Deactivate"
+              : "Activate"
+          }}
+        </button>
+      </div> -->
+    <!-- <button *ngIf="selected_role_rows.length == 1 && this.PermissFlag==1 && (this.selected_role_filter.code=='ACTIVE')"  mat-flat-button color="primary"
+        class="mx-1"  (click)="popupCommon(edit)">
+        Edit
+      </button> -->
+    <!-- </div> -->
+
+    <div id="role-list-grid-container" class="pt-3 flex-grow-1">
+      <!-- *ngIf="
+        this.PermissFlag == 1 || this.PermissFlag == 2 || this.PermissFlag == 3
+      " -->
+      <!-- gridHeight="100%" -->
+
+      <angular-slickgrid
+        gridHeight="100%"
+        gridId="rolesGrid"
+        [columnDefinitions]="role_list_grid_column_definitions"
+        [gridOptions]="role_list_grid_options"
+        [dataset]="role_list_grid_dataset"
+        (sgOnCellChange)="
+          onRoleListGridCellChanged($event.detail.eventData, $event.detail.args)
+        "
+        (onAngularGridCreated)="roleListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          roleListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

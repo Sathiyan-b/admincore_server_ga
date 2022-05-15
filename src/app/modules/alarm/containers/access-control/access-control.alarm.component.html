@@ -1,0 +1,71 @@
+<!-- <div class="col-12 col-md-12 p-0"> -->
+<mat-tab-group class="h-100" [(selectedIndex)]="TabIndex">
+  <mat-tab *ngIf="user_permission_guard.hasCanViewRolePermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlRolesTab">
+        <mat-icon svgIcon="role" class="custom-icon mr-3"></mat-icon>&nbsp;
+        {{ "Roles" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <alarm-roles></alarm-roles>
+    </ng-template>
+  </mat-tab>
+  <mat-tab *ngIf="user_permission_guard.hasCanViewUserPermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlUsersTab">
+        <mat-icon svgIcon="user" class="custom-icon mr-3"></mat-icon>
+        {{ "Users" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <alarm-users></alarm-users>
+    </ng-template>
+  </mat-tab>
+  <mat-tab *ngIf="user_permission_guard.hasCanViewTeamPermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlUserTeamTab">
+        <mat-icon svgIcon="userteam" class="custom-icon mr-3"></mat-icon>&nbsp;
+        {{ "User Teams" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <alarm-userteam></alarm-userteam>
+    </ng-template>
+  </mat-tab>
+  <mat-tab *ngIf="user_permission_guard.hasCanViewPointOfCarePermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlPointofCareTab">
+        <mat-icon svgIcon="pointofcare" class="custom-icon mr-3"></mat-icon
+        >&nbsp; {{ "Point of Care" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <alarm-pointofcare></alarm-pointofcare>
+    </ng-template>
+  </mat-tab>
+  <mat-tab *ngIf="user_permission_guard.hasCanViewPasswordPolicyPermissions()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlPasswordPolicyTab">
+        <mat-icon svgIcon="passwordpolicy" class="custom-icon mr-3"></mat-icon
+        >&nbsp;
+        {{ "Password Policy" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <password-policy></password-policy>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="AccessControlAlarmTab">
+        <mat-icon svgIcon="alarm" class="custom-icon mr-3"></mat-icon>&nbsp;
+        {{ "Alarms" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <app-alarm-view></app-alarm-view>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+<!-- </div> -->

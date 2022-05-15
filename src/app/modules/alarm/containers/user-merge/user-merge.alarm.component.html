@@ -1,0 +1,514 @@
+<form
+  #userMergeForm="ngForm"
+  class="d-flex flex-column align-items-center pt-3"
+>
+  <!-- [ngClass]="{
+  'col-md-10': !is_edit,
+  'col-md-5': is_edit
+}" -->
+
+  <mat-card
+    class="p-3 mat-elevation-z2"
+    class="col-11 col-md-8 border no-gutters"
+  >
+    <div class="row no-gutters pb-3">
+      <ng-container *ngIf="is_edit">
+        <mat-icon svgIcon="edit-user" class="custom-icon"></mat-icon>&nbsp;
+        <p class="h5 mr-auto">{{ "Edit User" | translate }}</p>
+      </ng-container>
+      <ng-container *ngIf="!is_edit">
+        <mat-icon svgIcon="create-user" class="custom-icon"></mat-icon>&nbsp;
+        <p class="h5 mr-auto">{{ "New User" | translate }}</p>
+      </ng-container>
+      <button
+        *ngIf="is_add && !is_edit"
+        (click)="save(userMergeForm)"
+        mat-mini-fab
+        class="mr-2"
+        style="background-color: green"
+        data-toggle="tooltip"
+        title="Update"
+        id="userMergeUpdateButton"
+        [ngStyle]="{
+          'background-color': userMergeForm.touched ? 'green' : '#8c8c8c'
+        }"
+      >
+        <i class="fas fa-save" style="color: white"></i>
+      </button>
+      <button
+        *ngIf="is_add && !is_edit"
+        (click)="addNew(userMergeForm)"
+        mat-mini-fab
+        class="mr-2"
+        style="background-color: #660099"
+        data-toggle="tooltip"
+        title="Add user"
+        id="userMergeAddButton"
+      >
+        <i class="fas fa-user-plus"></i>
+      </button>
+      <button
+        *ngIf="(!is_ldap && !is_add) || (is_add && is_edit)"
+        class="mr-2"
+        (click)="save(userMergeForm)"
+        mat-mini-fab
+        style="background-color: green"
+        data-toggle="tooltip"
+        title="Save"
+        [disabled]="!userMergeForm.dirty"
+        [ngStyle]="{
+          'background-color': userMergeForm.dirty ? 'green' : '#8c8c8c'
+        }"
+        id="userMergeSaveButton"
+      >
+        <i class="fas fa-save" style="font-size: large"></i>
+      </button>
+      <button
+        (click)="cancel(userMergeForm)"
+        mat-mini-fab
+        color="primary"
+        data-toggle="tooltip"
+        title="Cancel"
+        id="userMergeCancelButton"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="row no-gutters">
+      <div class="col p-2">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>{{ "First name" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="First name"
+            [(ngModel)]="user.first_name"
+            name="first_name"
+            maxlength="40"
+            required
+            [readonly]="is_ldap ? true : false"
+            [customValidator]="validator_service.emptyString"
+            #firstname="ngModel"
+            id="userMergeFirstNameInput"
+          />
+          <mat-error
+            *ngIf="
+              !firstname.hasError('required') && firstname.hasError('invalid')
+            "
+          >
+            {{ "invalid input" | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="!is_ldap" appearance="outline" class="col mt-0">
+          <mat-label>{{ "Middle name" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="Middle name"
+            [(ngModel)]="user.middle_name"
+            name="middle_name"
+            maxlength="40"
+            [readonly]="is_ldap ? true : false"
+            #middlename="ngModel"
+            id="userMergeMiddleNameInput"
+          />
+        </mat-form-field>
+        <mat-form-field *ngIf="!is_ldap" appearance="outline" class="col mt-0">
+          <mat-label>{{ "Last name" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="Last name"
+            [(ngModel)]="user.last_name"
+            name="last_name"
+            required
+            maxlength="40"
+            [readonly]="is_ldap ? true : false"
+            #lastname="ngModel"
+            [customValidator]="validator_service.emptyString"
+            id="userMergeLastNameInput"
+          />
+          <mat-error
+            *ngIf="
+              !lastname.hasError('required') && lastname.hasError('invalid')
+            "
+          >
+            {{ "invalid input" | translate }}
+          </mat-error>
+        </mat-form-field>
+        <!-- <mat-form-field *ngIf="!is_ldap" appearance="outline" class="mt-0">
+          <mat-label>Initials</mat-label>
+          <input
+            matInput
+            placeholder="Initials"
+            [(ngModel)]="user.initials"
+            name="initials"
+            [readonly]="is_ldap ? true : false"
+          />
+        </mat-form-field> -->
+        <div class="d-flex flex-row">
+          <div *ngIf="!is_ldap" class="auto-width">
+            <mat-form-field appearance="outline">
+              <mat-select
+                name="country_code"
+                required
+                [(ngModel)]="selected_country_code"
+                (selectionChange)="onChangeCountryCode($event)"
+                id="userMergeCountryCodeInput"
+              >
+                <mat-select-trigger>
+                  {{
+                    selected_country_code.display_text
+                      ? selected_country_code.display_text
+                      : ""
+                  }}
+                </mat-select-trigger>
+                <mat-option
+                  *ngFor="let country_code of country_code_list"
+                  [value]="country_code"
+                  >{{ country_code.name }}</mat-option
+                >
+              </mat-select>
+              <!-- <input matSuffix matInput type="text" placeholder="number" [(ngModel)]="phone" /> -->
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="mt-0 flex-grow-1 ml-1">
+            <mat-label>{{ "Mobile number" | translate }}</mat-label>
+            <input
+              matInput
+              placeholder="Mobile number"
+              [(ngModel)]="mobile_number"
+              name="mobile_number"
+              required
+              [readonly]="is_ldap ? true : false"
+              [customValidator]="validator_service.formValidatePhoneNumber"
+              #mobileNumberCtrl="ngModel"
+              id="userMergeMobileNumberInput"
+            />
+            <mat-error
+              *ngIf="
+                !mobileNumberCtrl.hasError('required') &&
+                mobileNumberCtrl.hasError('invalid_phone_number')
+              "
+            >
+              {{ "invalid input" | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="col mt-0">
+          <mat-label>{{ "Email" | translate }}</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="Email"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            [readonly]="is_ldap ? true : false"
+            #emailCtrl="ngModel"
+            [customValidator]="validator_service.email"
+            [UserEmailValidator]="user.id"
+            id="userMergeEmailInput"
+          />
+          <mat-error
+            *ngIf="
+              !emailCtrl.hasError('required') && emailCtrl.hasError('invalid')
+            "
+            >{{ "invalid email" | translate }}</mat-error
+          >
+          <mat-error *ngIf="emailCtrl.hasError('exist')">
+            {{ "Email address already exists" | translate }}
+          </mat-error>
+          <mat-error *ngIf="emailCtrl.hasError('active')">
+            {{ "Email address already exists in inactive" | translate }}
+          </mat-error>
+        </mat-form-field>
+        <mat-checkbox
+          *ngIf="!is_ldap"
+          class="mb-3 label-field-text-smaller"
+          (change)="onEmailIdAsLoginIdChange($event)"
+          [(ngModel)]="user.email_as_login_id"
+          name="email_as_login_id"
+          id="userMergeEmailAsLoginInput"
+        >
+          {{ "Set email id as login id" | translate }}
+        </mat-checkbox>
+      </div>
+      <div class="col p-2">
+        <mat-form-field appearance="outline" class="col mt-0">
+          <mat-label>{{ "Login ID" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="Login ID"
+            [(ngModel)]="user.login"
+            [readonly]="user.email_as_login_id"
+            name="login"
+            required
+            [customValidator]="validator_service.emptyString"
+            [UserLoginIDValidator]="user.id"
+            #LoginIdCtrl="ngModel"
+            id="userMergeLoginIDInput"
+          />
+          <mat-error *ngIf="LoginIdCtrl.hasError('required')">
+            {{ "required" | translate }}
+          </mat-error>
+          <mat-error *ngIf="LoginIdCtrl.hasError('exist')">
+            {{ "Login ID already exists" | translate }}
+          </mat-error>
+          <mat-error *ngIf="LoginIdCtrl.hasError('active')">
+            {{ "Login ID already exists in inactive" | translate }}
+          </mat-error>
+        </mat-form-field>
+        <div *ngIf="!is_ldap && !this.is_edit">
+          <mat-form-field appearance="outline" class="col">
+            <mat-label>{{ "Password" | translate }}</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="Password"
+              [(ngModel)]="user.password"
+              name="password"
+              required
+              [customValidator]="validator_service.formConfirmPassword"
+              #password="ngModel"
+              id="userMergePasswordInput"
+            />
+            <mat-error
+              *ngIf="
+                !password.hasError('required') && password.hasError('mismatch')
+              "
+              >password mismatch</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            class="col"
+            *ngIf="!is_ldap && !this.is_edit"
+          >
+            <mat-label>{{ "Confirm" | translate }}</mat-label>
+            <input
+              type="password"
+              matInput
+              placeholder="Confirm"
+              [(ngModel)]="user.confirm_password"
+              name="confirm_password"
+              required
+              #confirmPasswordCtrl="ngModel"
+              [customValidator]="validator_service.formConfirmPassword"
+              id="userMergeConfirmPasswordInput"
+            />
+            <mat-error
+              *ngIf="
+                !confirmPasswordCtrl.hasError('required') &&
+                confirmPasswordCtrl.hasError('mismatch')
+              "
+              >password mismatch</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <!-- <ng-select
+          class="mt-0 selection-check-box"
+          [closeOnSelect]="false"
+          [hideSelected]="true"
+          bindLabel="name"
+          [items]="LanguageList"
+          appearance="outline"
+          bindValue="code"
+          placeholder="Preferred Language"
+          [(ngModel)]="user.lang_code"
+          id="userMergePreferredLanguage"
+          name="preferred_language"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span [id]="'userMerge' + item.name">
+              {{ item.name }}</span
+            >
+            <span
+              class="ng-value-icon right px-1"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><i class="fas fa-times-circle"></i
+            ></span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span [id]="'userMergeOption' + item.name">
+              {{ item.name }}</span
+            >
+          </ng-template>
+        </ng-select> -->
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>{{ "Preferred language" | translate }}</mat-label>
+          <!-- <mat-label>{{ "Change Language" | translate }}</mat-label> -->
+          <mat-select
+            [(ngModel)]="selectedLang"
+            name="selected_lang"
+          >
+          <!-- (selectionChange)="switchLang(selected_lang)" -->
+            <mat-option
+              *ngFor="let language of LanguageList"
+              [value]="language.code"
+            >
+              {{ language.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <ng-select
+        class="mt-0 selection-check-box"
+        [items]="role_profile_list"
+        [multiple]="true"
+        [closeOnSelect]="false"
+        [hideSelected]="true"
+        bindLabel="display_text"
+        commented_bindValue="id"
+        [(ngModel)]="user.roleprofile"
+        appearance="outline"
+        [placeholder]="is_ldap ? 'LDAP Groups' : 'Roles'"
+        name="roleprofile"
+        #roleProfileCtrl="ngModel"
+        [readonly]="is_ldap ? true : false"
+        required
+      >
+      </ng-select> -->
+        <ng-select
+          class="mt-0 selection-check-box"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          [hideSelected]="true"
+          bindLabel="display_text"
+          [items]="role_profile_list"
+          appearance="outline"
+          commented_bindValue="id"
+          [placeholder]="is_ldap ? 'LDAP Groups' : 'Roles'"
+          [(ngModel)]="user.roleprofile"
+          id="userMergeRoleProfile"
+          name="roleprofile"
+          #roleProfileCtrl="ngModel"
+          [readonly]="is_ldap ? true : false"
+          required
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span [id]="'userMerge' + item.display_text">
+              {{ item.display_text }}</span
+            >
+            <span
+              class="ng-value-icon right px-1"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><i class="fas fa-times-circle"></i
+            ></span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span [id]="'userMergeOption' + item.display_text">
+              {{ item.display_text }}</span
+            >
+          </ng-template>
+        </ng-select>
+        <!-- <ng-select
+        *ngIf="!is_ldap"
+        class="label-field-text"
+        [items]="enterprise_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [hideSelected]="false"
+        bindLabel="display_text"
+        commented_bindValue="id"
+        [(ngModel)]="user.enterprise"
+        appearance="outline"
+        placeholder="Enterprise"
+        name="enterprise"
+        #enterprise_list_Ctrl="ngModel"
+        required
+        (change)="onEnterpriseChange($event)"
+      >
+      </ng-select>
+
+      <ng-select
+        *ngIf="!is_ldap"
+        class="label-field-text"
+        [items]="location_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [hideSelected]="false"
+        bindLabel="display_text"
+        commented_bindValue="id"
+        [(ngModel)]="user.location"
+        appearance="outline"
+        placeholder="Location"
+        name="location"
+        #enterprise_list_Ctrl="ngModel"
+        required
+      >
+      </ng-select> -->
+        <mat-checkbox
+          class="mb-3 label-field-text-smaller"
+          [(ngModel)]="user.is_suspended"
+          *ngIf="false"
+          name="is_suspended"
+          id="userMergeIsSuspendedInput"
+        >
+          <!--*ngIf="!is_ldap && is_edit"-->
+          Is Account Locked?
+        </mat-checkbox>
+        <mat-checkbox
+          class="mb-3 label-field-text-smaller"
+          [(ngModel)]="!user.is_active"
+          *ngIf="false"
+          name="is_active"
+          id="userMergeIsActiveInput"
+        >
+          <!--*ngIf="!is_ldap && is_edit"-->
+          Is Account Disabled?
+        </mat-checkbox>
+        <div *ngIf="!is_edit">
+          <div class="gap-3">
+            <h6 class="pb-2">{{ "Password Policy :" | translate }}</h6>
+            <div class="text-muted">
+              <div>
+                <small
+                  >*  {{ "Password should be of minimum length " | translate
+                  }}{{ passwordpolicy.min_length }}</small
+                >
+              </div>
+              <div>
+                <small
+                  >*  {{ "Maximum length of Password allowed is " | translate
+                  }}{{ passwordpolicy.max_length }}</small
+                >
+              </div>
+              <div *ngIf="passwordpolicy.min_uppercase_reqd">
+                <small
+                  >*  {{ "Password requires minimum " | translate
+                  }}{{ passwordpolicy.min_uppercase_reqd ? "1" : ""
+                  }}{{ " Uppercase" | translate }}</small
+                >
+              </div>
+              <div *ngIf="passwordpolicy.min_lowercase_reqd">
+                <small
+                  >*  {{ "Password requires minimum " | translate
+                  }}{{ passwordpolicy.min_lowercase_reqd ? "1" : ""
+                  }}{{ " Lowercase" | translate }}</small
+                >
+              </div>
+              <div *ngIf="passwordpolicy.min_numerals_reqd">
+                <small
+                  >*  {{ "Password requires minimum " | translate
+                  }}{{ passwordpolicy.min_numerals_reqd ? "1" : ""
+                  }}{{ " Numerals" | translate }}</small
+                >
+              </div>
+              <div *ngIf="passwordpolicy.min_special_characters_reqd">
+                <small
+                  >*  {{ "Password requires only minimum " | translate
+                  }}{{ passwordpolicy.min_special_characters_reqd ? "1" : ""
+                  }}{{ " Special Characters" | translate }}</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-12 col-md-12 d-flex flex-column mt-3 no-gutters">
+    </div> -->
+  </mat-card>
+</form>

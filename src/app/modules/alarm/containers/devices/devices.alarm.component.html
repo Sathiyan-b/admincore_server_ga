@@ -1,0 +1,87 @@
+<div class="h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+      <!-- <p class="h5 flex-grow-1 pb-3">{{"Devices" | translate}}</p> -->
+      <div class="h5 flex-grow-1 pb-3">
+        <mat-icon svgIcon="device" class="custom-icon"></mat-icon>&nbsp;{{
+          "Devices" | translate
+        }}
+      </div>
+
+      <!-- <div
+        class="align-items-center"
+        *ngIf="
+          selected_device_rows.length > 0 
+        "
+      >
+        <button
+          mat-flat-button
+          color="warn"
+          class="mr-2"
+          (click)="popupCommon(delete)"
+        >
+          Delete
+        </button>
+        <button
+          *ngIf="
+            selected_device_rows.length == 1 
+          "
+          mat-flat-button
+          color="primary"
+          class="mr-2"
+          (click)="popupCommon(edit)"
+        >
+          Edit
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          class="mr-2"
+          (click)="popupCommon(lock)"
+          
+        >
+          Lock/Unlock
+        </button>
+      </div> -->
+      <button
+        (click)="gotoImportDevices()"
+        color="primary"
+        mat-mini-fab
+        data-toggle="tooltip"
+        title="Import Device"
+        class="command-button-text-size"
+      >
+        <mat-icon svgIcon="deviceImport" class="custom-icon"></mat-icon>
+      </button>
+      <!--<button
+        (click)="gotoImportLdapUsers()"
+        *ngIf="is_ldap_mode"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+        Import Users
+      </button> -->
+    </div>
+
+    <div id="device-list-grid-container" class="pt-4 px-1 flex-grow-1">
+      <!-- gridHeight="100%" -->
+
+      <angular-slickgrid
+        gridId="devicesGridd"
+        gridHeight="100%"
+        [columnDefinitions]="device_list_grid_column_definitions"
+        [gridOptions]="device_list_grid_options"
+        [dataset]="device_list_grid_dataset"
+        (sgOnCellChange)="
+          onDeviceListGridCellChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+        (onAngularGridCreated)="deviceListGridReady($event)"
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

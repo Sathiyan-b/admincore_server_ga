@@ -1,0 +1,44 @@
+<div class="h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+      <p class="h5 flex-grow-1 pb-3">Import LDAP Users</p>
+      <button
+        [disabled]="selected_user_rows.length == 0"
+        mat-mini-fab
+        (click)="importUsers()"
+        color="primary"
+        class="command-button-text-size"
+      >
+        <mat-icon svgIcon="import-LDAP" class="custom-icon"></mat-icon>
+      </button>
+      <button (click)="cancel()" mat-mini-fab class="ml-2" color="warn">
+        <!-- Cancel -->
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="user-ldap-list-grid-container" class="pt-4 px-1 flex-grow-1">
+      <!-- gridHeight="100%" -->
+      <angular-slickgrid
+        gridId="userGrid"
+        gridHeight="100%"
+        [columnDefinitions]="user_ldap_list_grid_column_definitions"
+        [gridOptions]="user_ldap_list_grid_options"
+        [dataset]="user_ldap_list_grid_dataset"
+        (sgOnCellChange)="
+          onUserLDAPListGridCellChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+        (onAngularGridCreated)="userLDAPListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          usersLDAPListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,122 @@
+<form
+  #locationMergeForm="ngForm"
+  class="d-flex flex-column align-items-center py-3"
+>
+  <mat-card
+    class="p-3 mat-elevation-z2"
+    class="col-11 col-md-4 border no-gutters"
+  >
+    <div class="row no-gutters">
+      <p class="h5 mr-auto">{{ is_edit ? "Edit Location" : "New Location" }}</p>
+      <button (click)="save(locationMergeForm)" mat-flat-button color="primary">
+        Save
+      </button>
+      <button (click)="cancel()" mat-flat-button class="ml-2" color="warn">Cancel</button>
+    </div>
+
+    <div class="col-12 col-md-12 d-flex flex-column mt-4 no-gutters">
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          placeholder="Name"
+          [(ngModel)]="location.display_text"
+          name="display_text"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>Address Line 1</mat-label>
+        <input
+          matInput
+          placeholder="Address Line 1"
+          [(ngModel)]="location.address_line_1"
+          name="address_line_1"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>Address Line 2</mat-label>
+        <input
+          matInput
+          placeholder="Address Line 2"
+          [(ngModel)]="location.address_line_2"
+          name="address_line_2"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>ZIP / Postal Code</mat-label>
+        <input
+          matInput
+          placeholder="zipcode"
+          [(ngModel)]="location.zipcode"
+          name="zipcode"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>Phone</mat-label>
+        <input
+          matInput
+          placeholder="Phone"
+          [(ngModel)]="location.phone_1"
+          name="phone_1"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="mt-1">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="location.email"
+          name="email"
+          required
+          #emailCtrl="ngModel"
+        />
+        <mat-error
+          *ngIf="!emailCtrl.hasError('required') && emailCtrl.hasError('email')"
+          >invalid email</mat-error
+        >
+      </mat-form-field>
+      </div>
+       <ng-select class="label-field-text"
+        [items]="locality_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [hideSelected]="false"
+        bindLabel="ref_value_display_text"
+        commented_bindValue="ref_value_display_text"
+        [(ngModel)]="location.locality"
+        appearance="outline"
+        placeholder="Locality"
+        name="locality"
+        #localityCtrl="ngModel"
+        required
+      >
+      </ng-select>
+      <ng-select class="label-field-text"
+      [items]="enterprise_list"
+      [multiple]="false"
+      [closeOnSelect]="true"
+      [hideSelected]="false"
+      bindLabel="display_text"
+      commented_bindValue="id"
+      [(ngModel)]="location.enterprise"
+      appearance="outline"
+      placeholder="Enterprise"
+      name="enterprise"
+      #enterprise_list_Ctrl="ngModel"
+      required
+    >
+    </ng-select>
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Roles</mat-label>
+        <mat-select [(ngModel)]="location.roles" multiple>
+          <mat-option *ngFor="let role of role_list" [value]="role.name">{{
+            role.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+    <!-- </div> -->
+  </mat-card>
+</form>

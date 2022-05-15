@@ -1,0 +1,105 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex no-gutters">
+      <!-- <mat-icon svgIcon="userteam" class="custom-icon"></mat-icon>&nbsp;
+      <p class="h5 flex-grow-1">
+        {{ "User Team" | translate }}
+      </p> -->
+      <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="user_team_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        id="userTeamSelectedFilterButton"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_user_team_filter"
+        (change)="onUserTeamFilterChange($event)"
+      >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span [id]="'userTeam' + item.name"> {{ item.name }}</span>
+          <span
+            class="ng-value-icon right px-1"
+            (click)="clear(item)"
+            aria-hidden="true"
+            ><i class="fas fa-times-circle"></i
+          ></span>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          <span [id]="'userTeamOption' + item.name"> {{ item.name }}</span>
+        </ng-template>
+      </ng-select>
+      <button
+        *ngIf="user_permission_guard.hasCanManageTeamsPermission()"
+        mat-mini-fab
+        color="primary"
+        (click)="goToUserTeamMerge()"
+        data-toggle="tooltip"
+        title="Create Role"
+        id="userTeamAddRoleButton"
+      >
+        <mat-icon svgIcon="create-userteam" class="custom-icon"></mat-icon>
+      </button>
+    </div>
+    <!-- <div class="row no-gutters align-items-center">
+      <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="user_team_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_user_team_filter"
+        (change)="onUserTeamFilterChange($event)"
+      >
+      </ng-select>
+      <div class="d-flex align-items-center">
+        <button
+          *ngIf="selected_user_team_rows.length > 1"
+          mat-flat-button
+          color="warn"
+          class="mx-1"
+        >
+          {{
+            this.selected_user_team_filter.code == "ACTIVE" ||
+            this.selected_user_team_filter.code == "LOCKED"
+              ? "Deactivate"
+              : "Activate"
+          }}
+        </button>
+      </div>
+    </div> -->
+    <!-- <button *ngIf="selected_user_team_rows.length == 1 
+                && (this.selected_user_team_filter.code=='ACTIVE')" mat-flat-button color="primary"
+                class="mx-1" (click)="popupCommon(edit)">
+          Edit
+        </button> -->
+    <!--<button (click)="popupCommon(lock)" *ngIf="selected_user_team_rows.length > 0
+                && (this.selected_user_team_filter.code=='ACTIVE' || this.selected_user_team_filter.code=='LOCKED')" 
+                mat-flat-button color="primary"
+                class="mx-1">
+          {{this.selected_user_team_filter.code=="LOCKED" ?  'Unlock' : 'Lock'}}
+        </button>-->
+
+    <div id="userteam-list-grid-container" class="flex-grow-1 mt-3">
+      <!-- gridHeight="100%" -->
+      <angular-slickgrid
+        gridId="userTeamGrid"
+        gridHeight="100%"
+        [columnDefinitions]="userteam_list_grid_column_definitions"
+        [gridOptions]="userteam_list_grid_options"
+        [dataset]="userteam_list_grid_dataset"
+        (onAngularGridCreated)="userTeamListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          userTeamListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

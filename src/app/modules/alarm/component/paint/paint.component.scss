@@ -1,0 +1,24 @@
+.width-200 {
+  width: 200px;
+}
+
+.canvas-wrapper {
+  overflow: auto;
+  width: 120vh;
+  height: 80vh;
+}
+.toolbox-item {
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+}
+
+img {
+  width: 28px;
+}
+
+.selected {
+  background-color: grey;
+}

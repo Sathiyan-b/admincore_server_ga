@@ -1,0 +1,29 @@
+.avatar {
+  object-fit: cover;
+  width: 30px;
+  height: 30px;
+}
+.side-nav-item {
+  i,
+  span {
+    color: white;
+    opacity: 0.8;
+  }
+  &.active {
+    i,
+    span {
+      opacity: 1;
+      font-weight: bold;
+    }
+  }
+}
+.side-nav {
+  width: 100px;
+}
+.sidebar-brand-icon i {
+  font-size: 2rem;
+  color: white;
+}
+.bold-label {
+  font-weight: normal;
+}

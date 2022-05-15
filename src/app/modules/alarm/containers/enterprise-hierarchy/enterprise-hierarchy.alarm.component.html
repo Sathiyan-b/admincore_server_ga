@@ -1,0 +1,94 @@
+<div class="h-100 d-flex flex-column bg-grey">
+  <div class="d-flex">
+    <mat-icon svgIcon="enterprise" class="custom-icon"></mat-icon>&nbsp;
+    <p class="h5 mb-3">{{ "Enterprise Hierarchy" | translate }}</p>
+  </div>
+  <div class="row no-gutters flex-grow-1 bg-white" style="height: 0px">
+    <div class="col-md-3 p-3 border h-100 overflow-auto">
+      <!-- Angular Tree 2 -->
+      <!-- [ngStyle]="{'left.px': x + 20, 'top.px': y}" -->
+      <tree-root
+        *ngIf="options != null"
+        #tree
+        [nodes]="data"
+        [options]="options"
+      >
+        <ng-template #treeNodeTemplate let-node let-index="index">
+          <span
+            [id]="'menu' + node.data.id"
+            (click)="handleNodeClick(node.data)"
+            >{{ node.data.name }}</span
+          >
+          <div
+            class="contextmenu m-0 py-0 p text-center border"
+            [ngStyle]="{ 'left.px': 20, 'top.px': 0 }"
+            style="display: none; background-color: cadetblue"
+            [id]="'custom_menu' + node.data.id"
+          >
+            <a
+              *ngFor="let menu of menu_list; let i = index"
+              (click)="handleMenuClick(menu, node.data)"
+              class="dropdown-item m-0 py-0 p px-4 text-center"
+              [ngClass]="{
+                'border-top': i > 0
+              }"
+              >{{ menu.name }}</a
+            >
+          </div>
+        </ng-template>
+      </tree-root>
+
+      <!-- Angular Material Tree Start-->
+
+      <!-- <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+              {{node.name}}
+          </mat-tree-node>
+          <mat-nested-tree-node
+          (contextmenu)="onRightClick()"
+          *matTreeNodeDef="let node; when: hasChild">
+              <div class="mat-tree-node">
+                <button mat-icon-button matTreeNodeToggle
+                        [attr.aria-label]="'Toggle ' + node.name">
+                  <mat-icon class="mat-icon-rtl-mirror">
+                    {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                  </mat-icon>
+                </button>
+                {{node.name}}
+              </div>
+              
+              <div
+      class="dropdown-menu dropdown-menu-sm p-0 hierarchy-node-context-menu"
+      id="menu"
+    >
+    <a
+        class="dropdown-item m-0 py-0 p text-center"
+        [ngClass]="{
+          'border-top': 1
+        }"
+        (click)="handleMenuClick()"
+        >Add room</a
+      >
+    </div>
+              <div [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+                  role="group">
+                <ng-container matTreeNodeOutlet></ng-container>
+            </div>
+          </mat-nested-tree-node>
+        </mat-tree> -->
+
+      <!-- Angular Tree End -->
+
+      <!-- Custom Tree -->
+
+      <!-- <app-enterprise-hierarchy-node  *ngIf="data.length > 0" [enterprise_nodes]="data"
+        (onHierarchyNodeEvent)="onHierarchyNodeEvent($event)"></app-enterprise-hierarchy-node> -->
+    </div>
+    <div
+      *ngIf="show_canvas"
+      class="col-md-9 p-3 border h-100 overflow-auto bg-warn"
+    >
+      <app-paint></app-paint>
+    </div>
+  </div>
+</div>

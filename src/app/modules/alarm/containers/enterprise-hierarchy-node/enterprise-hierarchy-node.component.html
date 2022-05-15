@@ -1,0 +1,60 @@
+<div
+  *ngIf="node != null"
+  class="ml-2 border-dark px-1"
+  [ngClass]="{
+    'border-left': !is_root
+  }"
+>
+  <div class="btn-group dropright align-items-center">
+    <div
+      *ngIf="has_child"
+      (click)="toggleChildren()"
+      class="mt-0 mb-0 ml-1 cursor-pointer"
+      [id]="node.id"
+    >
+      <i
+        class="fas small"
+        [ngClass]="{
+          'fa-chevron-right': !show_children,
+          'fa-chevron-down': show_children
+        }"
+      ></i>
+    </div>
+
+    <p
+      [ngClass]="{
+        'bg-primary text-white rounded px-3':
+          selected_node != null && selected_node.id == node.id
+      }"
+      class="mt-0 mb-0 ml-2 p cursor-pointer"
+      (click)="selectNode()"
+      [id]="'context-menu-trigger-' + node.id"
+      (contextmenu)="selectNode(); onRightClick($event)"
+    >
+      {{ node.name }}
+    </p>
+    <div
+      class="dropdown-menu dropdown-menu-sm p-0 hierarchy-node-context-menu"
+      [id]="'context-menu-' + node.id"
+    >
+      <a
+        class="dropdown-item m-0 py-0 p text-center"
+        *ngFor="let menu of menu_list; let i = index"
+        [ngClass]="{
+          'border-top': i > 0
+        }"
+        (click)="handleMenuClick(menu)"
+        >{{ menu.name }}</a
+      >
+    </div>
+  </div>
+  <div *ngIf="show_children">
+    <div *ngFor="let child of node.children">
+      <app-enterprise-hierarchy-node
+        [enterprise_nodes]="enterprise_nodes"
+        [id]="child.id"
+        [service]="service"
+      ></app-enterprise-hierarchy-node>
+    </div>
+  </div>
+</div>

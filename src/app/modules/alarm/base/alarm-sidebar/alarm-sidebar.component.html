@@ -1,0 +1,193 @@
+<div class="side-nav h-100 overflow-auto d-flex flex-column">
+  <!--<div class="sidebar-brand-icon d-flex flex-column align-items-center justify-content-center py-3 mx-2 border-bottom bottom-light">-->
+  <div
+    class="sidebar-brand-icon d-flex flex-column align-items-center justify-content-center py-3 mx-2 border-bottom bottom-light"
+  >
+    <input
+      type="file"
+      id="sidebarIconButton"
+      (change)="fileChangeEvent($event)"
+      style="display: none"
+      #FileUpload
+    />
+    <!-- <img
+      [src]="LogImageBase64"
+      style="
+        border-radius: 50% !important;
+        width: 50px !important;
+        cursor: pointer !important;
+      "
+      (click)="onClickImage($event)"
+    /> -->
+    <ng-container *ngIf="isLogSaved; else elseTemplate1">
+    </ng-container>
+    <ng-template #elseTemplate1>
+      <!-- <i
+        class="fa fa-puzzle-piece"
+        aria-hidden="true"
+        (click)="onClickImage($event)"
+      ></i> -->
+      <img
+        src="assets/icons/profile.png"
+        alt=""
+        style="
+          border-radius: 50% !important;
+          width: 60px !important;
+          cursor: pointer !important;
+        "
+      />
+    </ng-template>
+  </div>
+  <div class="flex-grow-1 overflow-auto">
+    <div
+      *ngFor="let menu of menu_list"
+      class="side-nav-item p-1 py-2"
+      [routerLinkActive]="['active']"
+      [routerLinkActiveOptions]="{ exact: false }"
+    >
+      <a
+        [routerLink]="menu.link"
+        id="sidebarAccessControlButton"
+        class="d-flex flex-column align-items-center justify-content-center"
+      >
+        <img
+          [src]="menu.img"
+          alt=""
+          width="40"
+          height="40"
+          alt="'menu.label'"
+        />
+        <span class="small text-center mt-1">{{ menu.label | translate }}</span>
+      </a>
+    </div>
+    <!-- <div
+      class="side-nav-item p-1 py-2"
+      [routerLinkActive]="['active']"
+      [routerLinkActiveOptions]="{ exact: false }"
+    >
+      <a
+        routerLink="application"
+        id="sidebarApplicationButton"
+        class="d-flex flex-column align-items-center justify-content-center"
+      >
+        <img
+          src="assets/icons/application.png"
+          alt=""
+          width="35"
+          height="35"
+          alt="Application"
+        />
+        <span class="small text-center mt-1">{{
+          "Application" | translate
+        }}</span>
+      </a>
+    </div>
+    <div
+      class="side-nav-item p-1 py-2"
+      [routerLinkActive]="['active']"
+      [routerLinkActiveOptions]="{ exact: false }"
+    >
+      <a
+        routerLink="enterprise-hierarchy"
+        id="sidebarEnterpriseHierarchyButton"
+        class="d-flex flex-column align-items-center justify-content-center"
+      >
+        <img
+          src="assets/icons/enterprise.png"
+          alt=""
+          width="40"
+          height="40"
+          alt="Enterprise"
+        />
+        <span class="small text-center mt-1">{{
+          "Enterprise" | translate
+        }}</span>
+      </a>
+    </div>
+    <div
+      class="side-nav-item px-2 py-3"
+      [routerLinkActive]="['active']"
+      [routerLinkActiveOptions]="{ exact: false }"
+    >
+      <a
+        routerLink="devices"
+        class="d-flex flex-column align-items-center justify-content-center"
+      >
+        <img
+          src="assets/icons/infusion-device.png"
+          alt="Devices"
+          width="40"
+          height="40"
+        />
+        <span class="small text-center mt-1">{{ "Devices" | translate }}</span>
+      </a>
+    </div>
+    <div
+      class="side-nav-item p-1 py-2"
+      [routerLinkActive]="['active']"
+      [routerLinkActiveOptions]="{ exact: false }"
+    >
+      <a
+        routerLink="Settings"
+        id="sidebarSettingsButton"
+        class="d-flex flex-column align-items-center justify-content-center"
+      >
+        <img
+          src="assets/icons/settings.png"
+          alt=""
+          width="40"
+          height="40"
+          alt="Settings"
+        />
+        <span class="small text-center mt-1">{{ "Settings" | translate }}</span>
+      </a>
+    </div> -->
+  </div>
+  <div
+    matRipple
+    class="d-flex flex-column align-items-center bg-primary py-2 mx-2 my-2 border-top border-light"
+    data-toggle="collapse"
+    data-target="#collapseExample"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+  >
+    <ng-container>
+      <img
+        src="assets/icons/default_profile.png"
+        class="avatar rounded-circle"
+      />
+    </ng-container>
+    <ng-template #elseTemplate>
+      <img
+        class="avatar rounded-circle"
+        src="http://i.stack.imgur.com/Dj7eP.jpg"
+      />
+    </ng-template>
+    <!--<img class="avatar rounded-circle" src="http://i.stack.imgur.com/Dj7eP.jpg" alt="user avatar" />-->
+    <p class="text-white px-2 pt-2 text-center small bold-label">
+      {{ user.initials + user.first_name }}
+    </p>
+  </div>
+  <div class="collapse" id="collapseExample">
+    <mat-card
+      id="sidebarProfileButton"
+      (click)="openUserProfileDialog()"
+      class="mx-2 bg-white p-0"
+      matRipple
+      style="cursor: pointer !important"
+    >
+      <p matRipple class="text-primary py-1 text-center small bold-label">
+        {{ "Profile" | translate }}
+      </p>
+    </mat-card>
+    <p
+      matRipple
+      id="sidebarLogoutButton"
+      (click)="logout()"
+      class="text-white mx-2 py-1 text-center small bold-label"
+      style="cursor: pointer !important"
+    >
+      {{ "Logout" | translate }}
+    </p>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+
+      <mat-form-field appearance="outline" class="mt-2 pl-md-1 col-md-3 col-6">
+        <mat-label>Search</mat-label>
+        <input matInput [placeholder]="'Search' | translate" name="search_string" [(ngModel)]="search_string"
+        />
+      </mat-form-field>
+      <button (click)="onSearchValue()" mat-mini-fab class="m-2 mt-3 mb-3" style="background-color: green" data-toggle="tooltip"
+        title="Update" id="patientMedicationSearcheButton">
+        <i class="fas fa-search" style="color: white"></i>
+      </button>
+      <!-- <qrcode [qrdata]="'Your data string'" [width]="256" [errorCorrectionLevel]="'M'"></qrcode> -->
+
+    </div>
+
+    <div id="patientmedication-list-grid-container" class="pt-4 px-1 flex-grow-1">
+
+      <angular-slickgrid gridId="patientmedicationGridd" gridHeight="100%"
+        [columnDefinitions]="patientmedication_list_grid_column_definitions"
+        [gridOptions]="patientmedication_list_grid_options" [dataset]="patientmedication_list_grid_dataset"
+        (sgOnCellChange)="
+          onDeviceListGridCellChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        " (onAngularGridCreated)="patientmedicationListGridReady($event)">
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

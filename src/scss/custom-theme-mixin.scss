@@ -1,0 +1,214 @@
+@mixin mix-app-theme($app-theme) {
+  $theme_primary: map-get($app-theme, primary);
+  $theme_accent: map-get($app-theme, accent);
+  $theme_warn: map-get($app-theme, warn);
+  $primary: mat-color($theme_primary, default) !global;
+  html,
+  body {
+    height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+  }
+  .h1,
+  .h2,
+  .h3,
+  .h4,
+  .h5,
+  .h6 {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    margin: 0px;
+  }
+  div,
+  form,
+  .mat-form-field {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .bg-primary {
+    background-color: red;
+  }
+  // .custom-modalbox {
+  // mat-dialog-container {
+  // padding: 0;
+  // margin: 0;
+  // }
+  // }
+
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
+  .mat-form-field {
+    font-size: 15px;
+  }
+  .mat-button-toggle-group {
+    font-size: 15px;
+  }
+  .mat-button-toggle-checked {
+    color: mat-color($theme_primary, default-contrast);
+    .mat-button-toggle-label-content {
+      background-color: mat-color($theme_primary);
+      color: mat-color($theme_primary, default-contrast);
+    }
+  }
+  .overflow-auto {
+    overflow: auto;
+  }
+  .hint_text {
+    font-size: xx-small;
+  }
+  .date-input {
+    width: 100px;
+  }
+  .mat-tab-group.mat-primary .mat-tab-label {
+    min-width: 0px !important;
+    opacity: 0.7 !important;
+    height: 40px !important;
+    // padding: 0px 10px;
+    // margin : 0px 10px !important;
+    // transition: none!important;
+    // transition-duration: 0ms!important;
+    // transition-delay: 0ms!important;
+  }
+  .mat-ink-bar {
+  }
+  .mat-tab-group.mat-primary .mat-tab-label-active {
+    // background-color: mat-color($theme_primary);
+    color: mat-color($theme_primary);
+  }
+
+  .mat-tab-body-wrapper {
+    height: 100%;
+  }
+  #wrapper {
+    display: flex;
+    #content-wrapper {
+      background-color: mat-color($theme_primary, default-contrast);
+      width: 100%;
+      overflow-x: hidden;
+      #content {
+        flex: 1 0 auto;
+      }
+    }
+  }
+  // .mat-form-field-appearance-outline .mat-form-field-infix {
+  //   padding: 25px 0px 12.5px 0px;
+  // }
+  // .mat-form-field-infix {
+  //   padding: 0;
+  //   border-top: 0;
+  // }
+
+  // //change top and padding-top as per required
+
+  // .mat-form-field-label-wrapper {
+  //   top: -0.2375em;
+  //   padding-top: 0.84375em;
+  // }
+  // .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+  //   .mat-form-field-label,
+  // .mat-form-field-appearance-outline.mat-form-field-can-float
+  //   .mat-input-server:focus
+  //   + .mat-form-field-label-wrapper
+  //   .mat-form-field-label {
+  //   transform: translateY(-1.4em) scale(0.75);
+  // }
+  // .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+  //   transform: translateY(0%) !important;
+  // }
+  // .ng-select .ng-select-container.ng-appearance-outline {
+  //   padding: 0 0.5em;
+  //   min-height: 0px;
+  // }
+  // .ng-select .ng-select-container {
+  //   align-items: center;
+  // }
+  // .ng-select.ng-select-multiple
+  //   .ng-select-container
+  //   .ng-value-container
+  //   .ng-placeholder {
+  //   position: absolute;
+  //   z-index: 1;
+  //   top: 1.1em;
+  // }
+  .mat-tree-node {
+    min-height: 0px !important;
+  }
+  .mat-form-field-label-wrapper {
+    top: -1.2375em;
+    padding-top: 0.84375em;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0.4em 0 0.8em 0;
+  }
+  // ng-select.ng-invalid.ng-touched .ng-select-container {
+  //   border-color: #dc3545;
+  //   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+  // }
+  .ng-select.ng-invalid.ng-touched
+    .ng-select-container.ng-appearance-outline:after {
+    border: solid 1px #f44336;
+    border-radius: 5px;
+    height: calc(100% - 0.5em);
+    pointer-events: none;
+    transition: border-color 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .command-button-text-size {
+    font-size: medium;
+  }
+  .selection-check-box {
+    font-size: smaller;
+  }
+  .label-field-text {
+    font-size: smaller;
+  }
+  .label-field-text-smaller {
+    font-size: smaller;
+  }
+  .selection-fields-text {
+    font-size: small;
+  }
+  ::-webkit-scrollbar {
+    width: 0.4em;
+    height: 0.4em;
+  }
+
+  ::-webkit-scrollbar-track {
+    // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: lightgrey;
+    outline: 1px solid slategrey;
+  }
+  .cursor-pointer {
+    cursor: pointer;
+  }
+}

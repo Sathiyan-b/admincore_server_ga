@@ -1,0 +1,182 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex no-gutters">
+      <!-- <mat-icon svgIcon="user" class="custom-icon"></mat-icon>&nbsp;
+      <p class="h5 flex-grow-1">
+        {{ "Users" | translate }}
+      </p> -->
+      <!-- *ngIf="!is_ldap_mode && this.PermissFlag == 1" -->
+      <!-- <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="user_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_user_filter"
+        (change)="onUserFilterChange($event)"
+      >
+      </ng-select> -->
+      <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="user_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        id="usersSelectedFilterButton"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_user_filter"
+        (change)="onUserFilterChange($event)"
+      >
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span [id]="'user' + item.name"> {{ item.name }}</span>
+          <span
+            class="ng-value-icon right px-1"
+            (click)="clear(item)"
+            aria-hidden="true"
+            ><i class="fas fa-times-circle"></i
+          ></span>
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item">
+          <span [id]="'userOption' + item.name"> {{ item.name }}</span>
+        </ng-template>
+      </ng-select>
+      <div class="d-flex ml-auto align-items-center">
+        <button
+          *ngIf="selected_user_rows.length > 0"
+          mat-mini-fab
+          class="mx-1"
+          [ngStyle]="{
+            'background-color':
+              selected_user_filter.code === 'INACTIVE' ? 'green' : 'red'
+          }"
+          (click)="userBulkDeactivateActivate()"
+        >
+          <!-- {{
+            this.selected_user_filter.code == "ACTIVE" ||
+            this.selected_user_filter.code == "LOCKED"
+              ? ""
+              : "Activate"
+          }} -->
+          <i
+            class="fa fa-trash"
+            *ngIf="
+              selected_user_filter.code == 'ACTIVE' ||
+              selected_user_filter.code == 'LOCKED'
+            "
+            title="Deactivate"
+          ></i>
+          <i
+            class="fas fa-trash-restore"
+            *ngIf="selected_user_filter.code == 'INACTIVE'"
+            title="Activate"
+          ></i>
+        </button>
+        <button
+          *ngIf="
+            selected_user_rows.length > 0 &&
+            (this.selected_user_filter.code == 'ACTIVE' ||
+              this.selected_user_filter.code == 'LOCKED')
+          "
+          mat-mini-fab
+          style="background-color: orange"
+          class="mx-1"
+          (click)="userBulkUnlockLock()"
+        >
+          <!-- {{ this.selected_user_filter.code == "LOCKED" ? "Unlock" : "Lock" }} -->
+          <i
+            class="fa fa-unlock-alt"
+            *ngIf="selected_user_filter.code == 'LOCKED'"
+            title="Unlock"
+          ></i>
+          <i
+            class="fa fa-lock"
+            *ngIf="selected_user_filter.code != 'LOCKED'"
+            title="Lock"
+          ></i>
+        </button>
+        <button
+          *ngIf="
+            user_permission_guard.hasCanManageUsersPermission() && !is_ldap_mode
+          "
+          mat-mini-fab
+          color="primary"
+          (click)="goToUserMerge()"
+          data-toggle="tooltip"
+          title="Create User"
+          id="usersAddButton"
+          class="mx-1"
+        >
+          <mat-icon svgIcon="create-user" class="custom-icon"></mat-icon>
+        </button>
+        <button
+          (click)="gotoImportLDAPUsers()"
+          *ngIf="
+            is_ldap_mode &&
+            user_permission_guard.hasCanManageUsersPermission()
+          "
+          mat-stroked-button
+          color="primary"
+          class="command-button-text-size mx-1"
+          id="createImportButton"
+        >
+          Import Users
+        </button>
+      </div>
+    </div>
+    <!--<div class="d-flex align-items-center">
+       <ng-select
+        class="col-md-3 col-8 mr-md-auto"
+        [items]="user_filter_list"
+        [multiple]="false"
+        [closeOnSelect]="true"
+        [searchable]="false"
+        bindLabel="name"
+        [placeholder]="'Filter' | translate"
+        [(ngModel)]="selected_user_filter"
+        (change)="onUserFilterChange($event)"
+      >
+      </ng-select> -->
+
+    <!-- <button
+        *ngIf="
+          selected_user_rows.length == 1 &&
+          this.selected_user_filter.code == 'ACTIVE'
+        "
+        mat-flat-button
+        color="primary"
+        class="mx-1"
+      >
+        Edit
+      </button> 
+    </div>-->
+
+    <div id="user-list-grid-container" class="flex-grow-1">
+      <!-- *ngIf="
+        this.PermissFlag == 1 || this.PermissFlag == 2 || this.PermissFlag == 3
+      " -->
+      <!-- gridHeight="100%" -->
+
+      <angular-slickgrid
+        gridId="usersGrid"
+        gridHeight="100%"
+        [columnDefinitions]="user_list_grid_column_definitions"
+        [gridOptions]="user_list_grid_options"
+        [dataset]="user_list_grid_dataset"
+        (sgOnCellChange)="
+          onUserListGridCellChanged($event.detail.eventData, $event.detail.args)
+        "
+        (onAngularGridCreated)="userListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          usersListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

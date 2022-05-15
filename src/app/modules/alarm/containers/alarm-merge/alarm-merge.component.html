@@ -1,0 +1,82 @@
+<form
+  #alarmMergeForm="ngForm"
+  class="d-flex flex-column align-items-center pt-3"
+>
+  <!-- [ngClass]="{
+  'col-md-10': !is_edit,
+  'col-md-5': is_edit
+}" -->
+
+  <mat-card
+    class="p-3 mat-elevation-z2"
+    class="col-11 col-md-8 border no-gutters"
+  >
+    <div class="row no-gutters pb-3">
+      <ng-container>
+        <mat-icon svgIcon="edit-user" class="custom-icon"></mat-icon>&nbsp;
+        <p class="h5 mr-auto">{{ "Edit Alarm" | translate }}</p>
+      </ng-container>
+      <button
+        (click)="save(alarmMergeForm)"
+        mat-mini-fab
+        class="mr-2"
+        style="background-color: green"
+        data-toggle="tooltip"
+        title="Update"
+        id="userMergeUpdateButton"
+      >
+        <i class="fas fa-save" style="color: white"></i>
+      </button>
+      <button
+        (click)="cancel(alarmMergeForm)"
+        mat-mini-fab
+        color="primary"
+        data-toggle="tooltip"
+        title="Cancel"
+        id="userMergeCancelButton"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="row no-gutters">
+      <div class="col p-2">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>{{ "Alarm" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="Alarm"
+            [(ngModel)]="alarm.identifier"
+            name="first_name"
+            maxlength="40"
+            required
+            #firstname="ngModel"
+            id="userMergeFirstNameInput"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col mt-0">
+          <mat-label>{{ "Alarm description" | translate }}</mat-label>
+          <input
+            matInput
+            placeholder="Alarm description"
+            [(ngModel)]="alarm.alarm_desc"
+            name="alarm_name"
+            maxlength="40"
+            #middlename="ngModel"
+            id="alarmMergeAlarmDescInput"
+          />
+        </mat-form-field>
+        <mat-checkbox
+          class="mb-3 label-field-text-smaller"
+          [(ngModel)]="alarm.is_priority"
+          name="email_as_login_id"
+          id="alarmMergeIsPriority"
+        >
+          {{ "Set priority" | translate }}
+        </mat-checkbox>
+      </div>
+    </div>
+    <!-- <div class="col-12 col-md-12 d-flex flex-column mt-3 no-gutters">
+    </div> -->
+  </mat-card>
+</form>

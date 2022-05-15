@@ -1,0 +1,13 @@
+::ng-deep .auto-width {
+    .mat-form-field {
+      width: auto !important;
+    }
+    .mat-select-value {
+      max-width: 100%;
+      width: auto !important;
+    }
+    .mat-form-field-infix {
+      max-width: 100%;
+      width: auto !important;
+    }
+  }

@@ -1,0 +1,82 @@
+<div class="h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+      <div class="h5 flex-grow-1 pb-3">
+        <mat-icon svgIcon="deviceImport" class="custom-icon"></mat-icon>&nbsp;
+        {{ "Import device" | translate }}
+      </div>
+
+      <button
+        [disabled]="selected_device_rows.length == 0"
+        (click)="importDevices()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size mx-2"
+      >
+        Import
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="command-button-text-size"
+        (click)="backDevice()"
+      >
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div class="row no-gutters align-items-center">
+      <label for="device-list-sheet">
+        <mat-form-field class="" appearance="outline">
+          <mat-label>Choose File</mat-label>
+          <input
+            readonly
+            matInput
+            placeholder=""
+            [(ngModel)]="device_list_sheet"
+          />
+          <mat-icon matSuffix>cloud_upload</mat-icon>
+        </mat-form-field>
+      </label>
+      <button
+        class="border mt-2 mx-3 align-self-start"
+        mat-flat-button
+        id="import_cablemap_button_reset  "
+        (click)="onClickReset()"
+        [disabled]="device_list_sheet.length == 0"
+      >
+        Reset
+      </button>
+    </div>
+    <input
+      class="d-none"
+      type="file"
+      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      (change)="onFileChange($event)"
+      id="device-list-sheet"
+    />
+
+    <div id="device-list-grid-container" class="pt-4 px-1 flex-grow-1">
+      <angular-slickgrid
+        gridId="devicesGrid"
+        gridHeight="100%"
+        [columnDefinitions]="device_list_grid_column_definitions"
+        [gridOptions]="device_list_grid_options"
+        [dataset]="device_list_grid_dataset"
+        (sgOnCellChange)="
+          onDeviceListGridCellChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+        (onAngularGridCreated)="deviceListGridReady($event)"
+        (sgOnSelectedRowsChanged)="
+          deviceListHandleSelectedRowsChanged(
+            $event.detail.eventData,
+            $event.detail.args
+          )
+        "
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

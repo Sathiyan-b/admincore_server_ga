@@ -1,0 +1,333 @@
+<form
+  #userSettingsForm="ngForm"
+  class="d-flex flex-column align-items-center py-3"
+>
+  <mat-card
+    class="p-3 mat-elevation-z2"
+    class="col-11 col-md-4 border no-gutters"
+  >
+    <div class="d-flex">
+      <mat-icon svgIcon="settings" class="custom-icon"></mat-icon>&nbsp;&nbsp;
+      <p class="h5 mr-auto">{{ "Settings" | translate }}</p>
+      <button
+        *ngIf="user_permission_guard.hasCanManageSettingPermission()"
+        (click)="save(userSettingsForm)"
+        mat-mini-fab
+        class="mr-2"
+        style="background-color: green"
+        data-toggle="tooltip"
+        title="Update"
+        id="settingsUpdateButton"
+      >
+        <i class="fas fa-save" style="color: white"></i>
+      </button>
+      <button
+        *ngIf="user_permission_guard.hasCanManageSettingPermission()"
+        (click)="cancel()"
+        mat-mini-fab
+        color="primary"
+        data-toggle="tooltip"
+        title="Cancel"
+        id="settingsCancelButton"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="col-12 col-md-12 d-flex flex-column mt-3 no-gutters">
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeUserNameFormatCollapse"
+      >
+        <i class="fa fa-user text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">
+          {{ "Username format" | translate }}
+        </p>
+      </div>
+      <div class="collapse mx-3" id="changeUserNameFormatCollapse">
+        <!-- <ng-select
+          [items]="username_list"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          [(ngModel)]="selected_username_format"
+          appearance="outline"
+          name="username_format"
+        >
+        </ng-select> -->
+        <ng-select
+          [items]="username_list"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          [(ngModel)]="selected_username_format"
+          id="settingsUsernameFormatInput"
+          appearance="outline"
+          name="username_format"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span [id]="'settingsUsernameFormat' + item.code">
+              {{ item.code }}</span
+            >
+            <span
+              class="ng-value-icon right px-1"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><i class="fas fa-times-circle"></i
+            ></span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span [id]="'settingsUsernameFormatOption' + item.code">
+              {{ item.code }}</span
+            >
+          </ng-template>
+        </ng-select>
+      </div>
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeDateFormatCollapse"
+      >
+        <i class="fa fa-calendar-alt text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">
+          {{ "DateTime format" | translate }}
+        </p>
+      </div>
+      <div class="collapse mx-3" id="changeDateFormatCollapse">
+        <mat-form-field appearance="outline" class="col-12">
+          <!-- <mat-label>{{ "Change DateTime Format" | translate }}</mat-label> -->
+          <mat-select
+            [(ngModel)]="selected_date_format"
+            name="selected_date_format"
+          >
+            <mat-option
+              *ngFor="let format of dateFormatList"
+              [value]="format.display_text"
+            >
+              {{ format.display_text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeLanguageCollapse"
+      >
+        <i class="fa fa-language text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">{{ "Change language" | translate }}</p>
+      </div>
+      <div class="collapse mx-3" id="changeLanguageCollapse">
+        <mat-form-field appearance="outline" class="col-12">
+          <!-- <mat-label>{{ "Change Language" | translate }}</mat-label> -->
+          <mat-select
+            [(ngModel)]="selected_lang"
+            name="selected_lang"
+            (selectionChange)="switchLang(selected_lang)"
+          >
+            <mat-option
+              *ngFor="let language of language_list"
+              [value]="language.code"
+            >
+              {{ language.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeRootUserFormatCollapse"
+        *ngIf="isRoot"
+      >
+        <i class="fa fa-sign-in text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">
+          {{ "Root User format" | translate }}
+        </p>
+      </div>
+      <div class="collapse mx-3" id="changeRootUserFormatCollapse">
+        <!-- <ng-select
+          [items]="rootuser_list"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          [(ngModel)]="selected_rootuser_format"
+          appearance="outline"
+          name="rootuser_format"
+        >
+        </ng-select> -->
+        <ng-select
+          [items]="rootuser_list"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          id="settingsRootUserFormat"
+          [(ngModel)]="selected_rootuser_format"
+          appearance="outline"
+          name="rootuser_format"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span [id]="'settingsRootUserFormat' + item.code">
+              {{ item.code }}</span
+            >
+            <span
+              class="ng-value-icon right px-1"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><i class="fas fa-times-circle"></i
+            ></span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span [id]="'settingsRootUserFormatOption' + item.code">
+              {{ item.code }}</span
+            >
+          </ng-template>
+        </ng-select>
+      </div>
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeRootRoleProfileFormatCollapse"
+        *ngIf="isRoot"
+      >
+        <i class="fa fa-tasks text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">
+          {{ "Root User Roleprofile format" | translate }}
+        </p>
+      </div>
+      <div class="collapse mx-3" id="changeRootRoleProfileFormatCollapse">
+        <!-- <ng-select
+          [items]="rootProfileList"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          [(ngModel)]="selected_rootProfile_format"
+          appearance="outline"
+          name="rootuser_roleprofile_format"
+        >
+        </ng-select> -->
+        <ng-select
+          [items]="rootProfileList"
+          bindLabel="display_text"
+          bindValue="code"
+          [multiple]="true"
+          id="settingsRootRoleFormat"
+          [(ngModel)]="selected_rootProfile_format"
+          appearance="outline"
+          name="rootuser_roleprofile_format"
+        >
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span [id]="'settingsRootRoleFormat' + item.code">
+              {{ item.code }}</span
+            >
+            <span
+              class="ng-value-icon right px-1"
+              (click)="clear(item)"
+              aria-hidden="true"
+              ><i class="fas fa-times-circle"></i
+            ></span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span [id]="'settingsRootRoleFormatOption' + item.code">
+              {{ item.code }}</span
+            >
+          </ng-template>
+        </ng-select>
+      </div>
+      <!-- Tags -->
+      <div
+        class="d-flex p-3 align-items-center"
+        data-toggle="collapse"
+        href="#changeTagsCollapse"
+        *ngIf="isRoot"
+      >
+        <i class="fa fa-calendar-alt text-primary mr-3" aria-hidden="true"></i>
+        <p class="pointer text-left">
+          {{ "Tags" | translate }}
+        </p>
+      </div>
+      <div class="collapse mx-3" id="changeTagsCollapse">
+        <!-- <mat-form-field appearance="outline" class="col-12">
+          <mat-select [(ngModel)]="selected_tag" selected>
+            <mat-option *ngFor="let item of tag_list" [value]="item.code">
+              <span>{{ item.name }} <mat-icon [ngStyle]="{'color':item.code}" style="font-size: 16px;">lens</mat-icon></span>
+            </mat-option>
+          </mat-select> -->
+        <!-- <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef> Code </th>
+              <td mat-cell *matCellDef="let item"> {{item.code}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>        
+        </mat-form-field>  -->
+        <!-- <ng-select
+          [items]="tag_list"
+          bindLabel="name"
+          bindValue="name"
+          id="settingsTagFormat"
+          [(ngModel)]="selected_tag"
+          appearance="outline"
+          name="tag_format"
+          (ngModelChange)="getTagdata()"
+        >
+          <ng-template class="d-flex" ng-label-tmp let-item="item">
+            <span>
+              <mat-form-field appearance="none">
+                <input
+                  matInput
+                  [(ngModel)]="item.name"
+                  name="name"
+                  id="userMergeFirstNameInput"
+                />
+                </mat-form-field>
+                <mat-form-field appearance="none">
+                  <input
+                    matInput
+                    type="color"
+                    [(ngModel)]="item.code"
+                    name="code"
+                    id="userMergeFirstNameInput"
+                  />
+                  </mat-form-field>
+              </span>
+          </ng-template>
+          <ng-template ng-option-tmp let-item="item">
+            <span>{{ item.name }} <mat-icon [ngStyle]="{'color':item.code}" style="font-size: 16px;">lens</mat-icon></span>
+          </ng-template>
+        </ng-select> -->
+        <table class="w-100">
+          <thead class="">
+            <th>Name</th>
+            <th>Color</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of tag_list let i=index">
+              <td><input type="text" style="border:none;padding: 5px;" [name]="'name'+i" [(ngModel)]="item.name" /></td>
+              <td>
+                <input
+                  type="color"
+                  [name]="'color'+i"
+                  id="color"
+                  style="border:none"
+                  [(ngModel)]="item.code"
+                />
+                <!-- <mat-icon
+                  [ngStyle]="{ color: item.code }"
+                  style="font-size: 16px"
+                  >lens</mat-icon
+                > -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </mat-card>
+</form>

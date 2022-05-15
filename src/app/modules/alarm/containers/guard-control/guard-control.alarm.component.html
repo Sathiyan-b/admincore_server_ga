@@ -1,0 +1,27 @@
+<!-- <div class="col-12 col-md-12 p-0"> -->
+<mat-tab-group class="h-100" [(selectedIndex)]="TabIndex">
+  <mat-tab *ngIf="user_permission_guard.hasCanViewRolePermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="GuardControlDevicesTab">
+        <mat-icon svgIcon="role" class="custom-icon mr-3"></mat-icon>&nbsp;
+        {{ "Devices" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <alarm-devices></alarm-devices>
+    </ng-template>
+  </mat-tab>
+  <mat-tab *ngIf="user_permission_guard.hasCanViewUserPermission()">
+    <ng-template mat-tab-label>
+      <div class="d-flex flex-row" id="GuardControlMedicationsTab">
+        <mat-icon svgIcon="user" class="custom-icon mr-3"></mat-icon>
+        {{ "Medications" | translate }}
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+     <alarm-patient-medications></alarm-patient-medications>
+    </ng-template>
+  </mat-tab>
+
+</mat-tab-group>
+<!-- </div> -->

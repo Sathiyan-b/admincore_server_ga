@@ -1,0 +1,29 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+      <p class="h5 flex-grow-1 pb-3">Locations</p>
+      <button
+        (click)="goToLocationMerge()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+        Define Location
+      </button>
+    </div>
+    <div id="location-list-grid-container" class="pt-4 flex-grow-1">
+      <!--  -->
+
+      <angular-slickgrid
+        gridHeight="100%"
+        gridId="locationsGrid"
+        class="grid-headers"
+        [columnDefinitions]="location_list_grid_column_definitions"
+        [gridOptions]="location_list_grid_options"
+        [dataset]="location_list_grid_dataset"
+        (onAngularGridCreated)="locationListGridReady($event)"
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

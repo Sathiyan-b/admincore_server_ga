@@ -1,0 +1,98 @@
+<div class="d-flex h-100 m-0" style="height: 100%">
+  <!-- <div class="d-flex">
+    <button>Click</button>
+  </div> -->
+  <div class="col-md-9 col-12">
+    <!-- <app-fabric-canvas [imageDataURL]="imageDataURL"></app-fabric-canvas> -->
+    <div>
+      <div class="d-flex mb-3">
+        <p class="h5 mt-auto">
+          {{ "Point of Care layout" | translate }} - {{ title }}
+        </p>
+        <!-- <button mat-flat-button color="text-primary" (click)="onSelect()">Create</button>
+       <button mat-flat-button color="text-primary" (click)="addImage()">Image</button> -->
+        <div
+          class="ml-auto"
+          *ngIf="
+            user_permission_guard.hasCanManageEnterpriseHierarchyPermission() &&
+            user_permission_guard.hasCanDesignEnterpriseHierarchyPermission()
+          "
+        >
+          <button
+            mat-mini-fab
+            style="background-color: red"
+            class="mr-2"
+            id="paintDeleteButton"
+            (click)="onDelete()"
+          >
+            <i class="fa fa-trash" style="font-size: large"></i>
+          </button>
+          <button
+            mat-mini-fab
+            style="background-color: green"
+            class="mr-2"
+            id="paintSaveButton"
+            (click)="convertToJSOn()"
+          >
+            <i class="fas fa-save" style="font-size: large"></i>
+          </button>
+        </div>
+        <!-- <button mat-mini-fab color="primary" class="mr-2" (click)="loadJSONData()">Load</button> -->
+      </div>
+      <div
+        class="canvas-wrapper border overflow-auto col-md-12 col-12"
+        id="canvas_wrapper"
+        style="background-color: #d6d6c2"
+      >
+        <!-- <div id="canvas-inside-wrapper" class="overflow-auto" style="height: 5000px;width: 5000px;"> -->
+        <canvas id="canvas"></canvas>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column mt-2 col-md-3 col-12 h-100 bg-white">
+    <!-- <app-graphical-toolbar></app-graphical-toolbar> -->
+    <p *ngIf="options.length > 0" class="h6 row my-3 pl-3">
+      {{ "Rooms" | translate }}
+    </p>
+    <!-- <div class="py-3 h-100 flex-column flex-grow-1" style="height: 0px"> -->
+    <div class="overflow-auto">
+      <div
+        *ngFor="let option of options; let ind = index"
+        style="overflow: auto"
+        class="d-flex justify-content-center"
+      >
+        <div *ngIf="ind % 2 == 0">
+          <button
+            mat-raised-button
+            class="mb-1 mr-1"
+            id="paintRoomButton"
+            (click)="
+              user_permission_guard.hasCanDesignEnterpriseHierarchyPermission()
+                ? onSelectRoom(options[ind])
+                : null
+            "
+          >
+            {{ options[ind].name }}
+          </button>
+          <button
+            *ngIf="options[ind + 1] && options[ind + 1].name"
+            mat-raised-button
+            class="mb-1"
+            id="paintSelectRoomButton"
+            (click)="
+              user_permission_guard.hasCanDesignEnterpriseHierarchyPermission()
+                ? onSelectRoom(options[ind + 1])
+                : null
+            "
+          >
+            {{ options[ind + 1].name }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- </div> -->
+  </div>
+  <!-- <div class="width-200">
+  </div> -->
+</div>

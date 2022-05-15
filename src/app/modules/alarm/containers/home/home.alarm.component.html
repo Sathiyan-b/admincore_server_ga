@@ -1,0 +1,47 @@
+<div class="col-12 col-md-6 pr-md-1 d-flex flex-column no-gutters ">
+  <mat-card>
+    <p class="h6 mb-2 text-primary">Privileges</p>
+    <ng-select
+      [items]="role.privilege_group_list"
+      bindLabel="name"
+      [(ngModel)]="privilege_group"
+      placeholder="Privilege Group"
+    >
+    </ng-select>
+    <ng-container *ngIf="privilege_group != null">
+      <div *ngFor="let privilege of privilege_group.privilege_list">
+        <mat-checkbox
+          [(ngModel)]="privilege.enabled"
+        >
+          {{ privilege.name }}
+        </mat-checkbox>
+      </div>
+    </ng-container>
+    <div class="bg-light p-3">
+      <p class="mb-2">Selected Privileges</p>
+      <div class="bg-white py-2 px-3">
+        <div *ngFor="let v of role.privilege_group_list" class="">
+          <ng-container
+            *ngIf="
+              (privilege_group != null && privilege_group.id != v.id) ||
+              privilege_group == null
+            "
+          >
+            <div *ngFor="let privilege of v.privilege_list">
+              <ng-container
+                *ngIf="privilege.enabled != null && privilege.enabled != false"
+              >
+                <mat-checkbox
+                  [(ngModel)]="privilege.enabled"
+                >
+                  {{ privilege.name }}
+                </mat-checkbox>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+   
+  </mat-card>
+</div>

@@ -1,0 +1,28 @@
+<div class="px-1 pt-3 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex">
+      <p class="h5 flex-grow-1 pb-3">Enterprises</p>
+      <button
+        (click)="goToEnterpriseMerge()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+        Define Enterprise
+      </button>
+    </div>
+    <div id="enterprise-list-grid-container" class="pt-4 flex-grow-1">
+      <!-- gridHeight="100%" -->
+
+      <angular-slickgrid
+        gridHeight="100%"
+        gridId="enterprisesGrid"
+        [columnDefinitions]="enterprise_list_grid_column_definitions"
+        [gridOptions]="enterprise_list_grid_options"
+        [dataset]="enterprise_list_grid_dataset"
+        (onAngularGridCreated)="enterpriseListGridReady($event)"
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

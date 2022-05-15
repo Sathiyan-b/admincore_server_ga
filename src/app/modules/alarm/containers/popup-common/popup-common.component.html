@@ -1,0 +1,8 @@
+<p class="h6 text-primary">{{"Admincore" | translate }}</p>
+<div class="my-3 small">
+  <p class="font-">{{ alert_data.message }}</p>
+</div>
+<div class="row no-gutters">
+  <button id="btnOk" mat-raised-button color="primary" class="mr-2 ml-auto" [mat-dialog-close]="true" cdkFocusInitial>{{"Okay" | translate}}</button>
+  <button id="btnCancel" mat-raised-button color="warn" (click)="onNoClick()">{{"Cancel" | translate}}</button>
+</div>

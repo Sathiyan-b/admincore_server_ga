@@ -1,0 +1,309 @@
+<form #roleMergeForm="ngForm" class="h-100 d-flex flex-column p-1">
+  <div class="row no-gutters mb-3">
+    <ng-container *ngIf="is_edit">
+      <mat-icon svgIcon="edit-role" class="custom-icon"></mat-icon>&nbsp;
+      <p class="h5 mr-auto">{{ "Edit Role" | translate }}</p>
+    </ng-container>
+
+    <ng-container *ngIf="!is_edit">
+      <mat-icon svgIcon="create-role" class="custom-icon"></mat-icon>&nbsp;
+      <p class="h5 mr-auto">{{ "New Role" | translate }}</p>
+    </ng-container>
+
+    <button
+      *ngIf="is_add && !is_edit"
+      style="background-color: green; color: white"
+      (click)="save(roleMergeForm)"
+      mat-mini-fab
+      class="mr-2"
+      color="success"
+      data-toggle="tooltip"
+      title="Update"
+      id="roleMergeUpdateButton"
+    >
+      <i class="fas fa-save"></i>
+    </button>
+    <button
+      *ngIf="is_add && !is_edit"
+      (click)="addNew(roleMergeForm)"
+      mat-mini-fab
+      class="mr-2"
+      style="background-color: #660099"
+      data-toggle="tooltip"
+      title="Add role"
+      id="roleMergeAddButton"
+    >
+      <i class="fas fa-user-plus"></i>
+    </button>
+    <button
+      *ngIf="!is_add || (is_add && is_edit)"
+      class="mr-2"
+      (click)="save(roleMergeForm)"
+      mat-mini-fab
+      style="background-color: green; color: white"
+      data-toggle="tooltip"
+      title="Save"
+      [disabled]="!roleMergeForm.dirty"
+      [ngStyle]="{
+        'background-color': roleMergeForm.dirty ? 'green' : '#8c8c8c'
+      }"
+      id="roleMergeSaveButton"
+    >
+      <!-- <div [ngStyle]="{'color': variable ? 'red' : 'blue'}"></div> -->
+      <i class="fas fa-save" style="font-size: large"></i>
+    </button>
+    <button
+      (click)="cancel(roleMergeForm)"
+      mat-mini-fab
+      color="primary"
+      data-toggle="tooltip"
+      title="Cancel"
+      id="roleMergeCancelButton"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="row no-gutters">
+    <mat-form-field appearance="outline" class="mr-md-3 col-md-3">
+      <mat-label>{{ "Role name" | translate }}</mat-label>
+      <input
+        name="name"
+        matInput
+        placeholder="Role name"
+        [(ngModel)]="role.display_text"
+        [customValidator]="validator_service.emptyString"
+        maxlength="40"
+        #rolename="ngModel"
+        required
+        [RoleProfileNameValidator]="role.id"
+      />
+      <mat-error
+        *ngIf="!rolename.hasError('required') && rolename.hasError('invalid')"
+      >
+        {{ "invalid input" | translate }}
+      </mat-error>
+      <mat-error *ngIf="rolename.hasError('exist')">
+        {{ "Role Name already exists" | translate }}
+      </mat-error>
+      <mat-error *ngIf="rolename.hasError('active')">
+        {{ "Role Name already exists in inactive status" | translate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="mr-md-3 col-md-4">
+      <mat-label>{{ "Purpose" | translate }}</mat-label>
+      <input
+        name="purpose"
+        matInput
+        placeholder="purpose"
+        [(ngModel)]="role.purpose"
+        [customValidator]="validator_service.emptyString"
+        maxlength="200"
+        #purpose="ngModel"
+        required
+      />
+      <mat-error
+        *ngIf="!purpose.hasError('required') && purpose.hasError('invalid')"
+      >
+        {{ "invalid input" | translate }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <!-- <mat-card class="pb-0"> -->
+  <!-- </mat-card> -->
+  <!--<div class="row no-gutters mt-1 flex-grow-1 overflow-auto">-->
+
+  <mat-tab-group class="h-100">
+    <mat-tab [label]="'Privileges' | translate">
+      <ng-template matTabContent>
+        <div class="row no-gutters h-100 p-1 pt-2">
+          <mat-card
+            class="bg-white col-md-4 col-12 p-0 d-flex flex-column overflow-auto"
+            name="privileges_card"
+          >
+            <!-- <ng-select
+              class="selection-fields-text mt-3 mx-3"
+              [ngModelOptions]="{ standalone: true }"
+              [items]="privilege_group_list"
+              bindLabel="privilege_group_display_text"
+              [(ngModel)]="privilege_group"
+              [placeholder]="'Privilege Group' | translate"
+              (change)="onPrivilegeGroupChange($event)"
+            >
+            </ng-select> -->
+            <ng-select
+              class="selection-fields-text mt-3 mx-3"
+              [ngModelOptions]="{ standalone: true }"
+              [items]="privilege_group_list"
+              bindLabel="privilege_group_display_text"
+              [(ngModel)]="privilege_group"
+              id="roleMergePrivilegeGroupInput"
+              [placeholder]="'Privilege group' | translate"
+              (change)="onPrivilegeGroupChange($event)"
+            >
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span [id]="'roleMerge' + item.privilege_group_display_text"> {{ item.privilege_group_display_text }}</span>
+                <span
+                  class="ng-value-icon right px-1"
+                  (click)="clear(item)"
+                  aria-hidden="true"
+                  ><i class="fas fa-times-circle"></i
+                ></span>
+              </ng-template>
+              <ng-template ng-option-tmp let-item="item">
+                <span [id]="'roleMergeOption' + item.privilege_group_display_text">
+                  {{ item.privilege_group_display_text }}</span
+                >
+              </ng-template>
+            </ng-select>
+            <div
+              class="flex-grow-1 overflow-auto"
+              style="height: 0px"
+              cdkDropList
+              #Privilege_List="cdkDropList"
+              [cdkDropListData]="listprivilege"
+              [cdkDropListConnectedTo]="[Existing_List]"
+              (cdkDropListDropped)="drop_privilege($event, roleMergeForm)"
+            >
+              <div
+                cdkDrag
+                *ngFor="let item of listprivilege"
+                class="px-3 py-2 border-bottom"
+              >
+                {{ item.display_text }}
+              </div>
+            </div>
+          </mat-card>
+
+          <div class="col-md-8 col-12 pl-3">
+            <mat-card
+              class="bg-white p-0 h-100 d-flex flex-column border border-success"
+            >
+              <p class="h6 my-3 mx-3 text-success">
+                {{ "Selected Privileges" | translate }}
+              </p>
+              <p
+                style="position: absolute; top: 50%"
+                class="text-center w-100 h5 text-primary"
+                *ngIf="selectprivileges.length == 0"
+              >
+                {{ "Drag and drop from Privilege List" | translate }}
+              </p>
+              <div
+                cdkDropList
+                #Existing_List="cdkDropList"
+                [cdkDropListData]="selectprivileges"
+                [cdkDropListConnectedTo]="[Privilege_List]"
+                class="flex-grow-1 overflow-auto"
+                style="height: 0px"
+                (cdkDropListDropped)="drop_privilege($event, roleMergeForm)"
+              >
+                <div
+                  cdkDrag
+                  *ngFor="let item of selectprivileges"
+                  class="px-3 py-2 border-bottom"
+                >
+                  {{ item.display_text }}
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </ng-template>
+    </mat-tab>
+
+    <!-- <mat-tab label="Privileges">
+      <ng-template matTabContent>
+        <div class="col-12 col-md-12 p-1 d-flex flex-column no-gutters h-100">
+          <mat-card class="h-100 d-flex flex-column">
+
+            <ng-select class="selection-fields-text"
+                       [ngModelOptions]="{ standalone: true }"
+                       [items]="privilege_group_list"
+                       bindLabel="privilege_group_display_text"
+                       [(ngModel)]="privilege_group"
+                       placeholder="Privilege Group"
+                       (change)="onPrivilegeGroupChange($event)">
+            </ng-select>
+            <div class="flex-grow-1 row no-gutters overflow-auto">
+              <div class="h-100 col-12 col-md-6 bg-light overflow-auto py-1 px-2">
+                <ng-container *ngIf="privilege_group != null">
+                  <div *ngFor="let privilege of role.privileges">
+                    <ng-container *ngIf="
+                    privilege_group.privilege_group_id ==
+                    privilege.privilege_group_id
+                  ">
+                      <mat-checkbox class="selection-check-box"
+                                    [ngModelOptions]="{ standalone: true }"
+                                    [(ngModel)]="privilege.enabled"
+                                    [(indeterminate)]="indeterminate"
+                                    [labelPosition]="labelPosition"
+                                    [disabled]="disabled">
+                        {{ privilege.display_text }}
+                      </mat-checkbox>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+              <div class="h-100 col-12 col-md-6 py-1 px-2 d-flex flex-column">
+                <p class="small mb-1 font-weight-bold">Selected Privileges</p>
+                <div class="flex-grow-1 overflow-auto">
+                  <div *ngFor="let privilege of role.privileges">
+                    <ng-container *ngIf="
+                    (privilege_group != null &&
+                      privilege_group.privilege_group_id !=
+                        privilege.privilege_group_id) ||
+                    privilege_group == null
+                  ">
+                      <ng-container *ngIf="
+                      privilege.enabled != null && privilege.enabled != false
+                    ">
+                        <mat-checkbox class="selection-check-box"
+                                      [ngModelOptions]="{ standalone: true }"
+                                      [(ngModel)]="privilege.enabled"
+                                      [(indeterminate)]="indeterminate"
+                                      [labelPosition]="labelPosition"
+                                      [disabled]="disabled">
+                          {{ privilege.display_text }}
+                        </mat-checkbox>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </mat-card>
+        </div>
+      </ng-template>
+    </mat-tab>-->
+    <mat-tab label="Ldap Groups">
+      <ng-template matTabContent>
+        <div class="col-12 col-md-12 p-1 d-flex flex-column no-gutters h-100">
+          <mat-card class="h-100 d-flex flex-column">
+            <!--<p class="h6 mb-1 text-primary">Ldap Groups</p>-->
+            <div
+              id="ldap_group-list-grid-container"
+              class="pt-4 px-1 flex-grow-1"
+            >
+              <angular-slickgrid
+                gridId="ldapGroupsGrid"
+                gridHeight="100%"
+                [columnDefinitions]="ldap_group_list_grid_column_definitions"
+                [gridOptions]="ldap_group_list_grid_options"
+                [dataset]="ldap_group_list_grid_dataset"
+                (sgOnCellChange)="
+                  onLdapGroupListGridCellChanged(
+                    $event.detail.eventData,
+                    $event.detail.args
+                  )
+                "
+                (onAngularGridCreated)="ldapGroupListGridReady($event)"
+              >
+              </angular-slickgrid>
+            </div>
+          </mat-card>
+        </div>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</form>

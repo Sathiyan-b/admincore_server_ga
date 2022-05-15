@@ -1,0 +1,9 @@
+<p class="h6 text-primary">{{"Alarm" | translate}}</p>
+<div class="my-3 small">
+  <p class="font-">{{ alert_data.message }}</p>
+</div>
+<div class="row no-gutters">
+  <button  id="popupCommonCancelButton" mat-raised-button color="warn" class="mr-2 ml-auto" (click)="onNoClick()">{{"Ok" | translate}}</button>
+  <button id="popupCommonOkayButton" mat-raised-button color="primary"  [mat-dialog-close]="true" cdkFocusInitial>{{"Cancel" | translate}}</button>
+  
+</div>

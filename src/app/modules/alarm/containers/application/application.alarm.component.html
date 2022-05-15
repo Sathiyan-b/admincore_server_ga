@@ -1,0 +1,45 @@
+<div class="px-1 pb-1 h-100">
+  <mat-card class="p-3 mat-elevation-z2 h-100 d-flex flex-column">
+    <div class="d-flex mb-3">
+      <mat-icon svgIcon="registeredapplication" class="custom-icon"></mat-icon
+      >&nbsp;
+      <p class="h5 flex-grow-1">{{ "Registered Applications" | translate }}</p>
+      <!-- <button
+        (click)="goToApplicationMerge()"
+        mat-stroked-button
+        color="primary"
+        class="command-button-text-size"
+      >
+       {{"Register Application" | translate}}
+      </button> -->
+      <button
+        *ngIf="user_permission_guard.hasCanManageRegisteredAppPermission()"
+        mat-mini-fab
+        color="primary"
+        id="applicationAddButton"
+        (click)="goToApplicationMerge()"
+        data-toggle="tooltip"
+        title="Add/Edit Application"
+        id="applicationAddEditButton"
+      >
+        <mat-icon
+          svgIcon="create-registeredapplication"
+          class="custom-icon"
+        ></mat-icon>
+      </button>
+    </div>
+    <div id="application-list-grid-container" class="flex-grow-1">
+      <!-- gridHeight="100%" -->
+
+      <angular-slickgrid
+        gridId="applicationGrid"
+        gridHeight="100%"
+        [columnDefinitions]="application_list_grid_column_definitions"
+        [gridOptions]="application_list_grid_options"
+        [dataset]="application_list"
+        (onAngularGridCreated)="applicationListGridReady($event)"
+      >
+      </angular-slickgrid>
+    </div>
+  </mat-card>
+</div>

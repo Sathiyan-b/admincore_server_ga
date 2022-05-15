@@ -1,0 +1,32 @@
+<div class="px-1 pt-3 pb-1 h-100">
+    <mat-card class="mat-elevation-z2 h-100 d-flex flex-column">
+      <div class="d-flex no-gutters">
+        <div class="flex-grow-1">
+            Alarm
+        </div>
+        <!-- <button
+          mat-mini-fab
+          color="primary"
+          (click)="goToAlarmMerge()"
+          data-toggle="tooltip"
+          title="Create User"
+          id="usersAddButton"
+        >
+          <mat-icon svgIcon="create-user" class="custom-icon"></mat-icon>
+        </button> -->
+      </div>
+    
+      <div id="alarm-list-grid-container" class="flex-grow-1 pt-3">
+        <angular-slickgrid
+          gridId="alarmGrid"
+          gridHeight="100%"
+          [columnDefinitions]="alarm_list_grid_column_definitions"
+          [gridOptions]="alarm_list_grid_options"
+          [dataset]="alarm_list_grid_dataset"
+          (onAngularGridCreated)="alarmListGridReady($event)"
+        >
+        </angular-slickgrid>
+      </div>
+    </mat-card>
+  </div>
+  

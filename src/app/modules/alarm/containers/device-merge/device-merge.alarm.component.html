@@ -1,0 +1,154 @@
+<form
+  #deviceMergeForm="ngForm"
+  class="d-flex align-items-start justify-content-center h-100"
+>
+  <mat-card
+    class="p-3 mat-elevation-z2"
+    class="col-11 col-md-8 border no-gutters"
+  >
+    <div class="row no-gutters">
+      <div class="h5 mr-auto pl-2 pt-1" *ngIf="!is_edit">
+        <div class="h5 flex-grow-1 pb-3">
+          <mat-icon svgIcon="importDevice" class="custom-icon"></mat-icon>&nbsp;
+          {{ "Import device" | translate }}
+        </div>
+      </div>
+      <div class="h5 mr-auto pl-2 pt-1" *ngIf="is_edit">
+        <mat-icon svgIcon="deviceEdit" class="custom-icon"></mat-icon>&nbsp;
+        {{ "Edit device" | translate }}
+      </div>
+      <button
+        (click)="save(deviceMergeForm)"
+        mat-mini-fab
+        style="background-color: green"
+      >
+        <i class="fas fa-save" style="font-size: large"></i>
+      </button>
+      <button
+        (click)="cancel()"
+        mat-mini-fab
+        color="warn"
+        class="ml-2"
+        color="primary"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="mt-3 row no-gutters">
+      <mat-form-field appearance="outline" class="col-md-6 px-2">
+        <mat-label>{{ "Serial No" | translate }}</mat-label>
+        <input
+          
+          matInput
+          [placeholder]="'Name' | translate"
+          [(ngModel)]="device.identifier"
+          [customValidator]="validator_service.emptyString"
+          #serialno="ngModel"
+          name="serialno"
+          required
+        />
+        <mat-error
+          *ngIf="!serialno.hasError('required') && serialno.hasError('invalid')"
+        >
+          invalid input
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-6 px-2">
+        <mat-label>{{ "Name" | translate }}</mat-label>
+        <input
+         
+          matInput
+          [placeholder]="'Name' | translate"
+          [(ngModel)]="device.display_text"
+          [customValidator]="validator_service.emptyString"
+          #name="ngModel"
+          name="name"
+          required
+        />
+        <mat-error
+          *ngIf="!name.hasError('required') && name.hasError('invalid')"
+        >
+          invalid input
+        </mat-error>
+      </mat-form-field>
+      <div class="col-md-6 px-2">
+        <ng-select
+          [items]="device_manufacturer_list"
+          bindLabel="display_text"
+          [addTag]="addDeviceManufacturer"
+          bindValue="display_text"
+          [(ngModel)]="device.manufacturer"
+          appearance="outline"
+          placeholder="Manufacturer"
+          name="device_manufacturer"
+          required
+        >
+        </ng-select>
+      </div>
+      <div  class="col-md-6 px-2">
+        <ng-select
+          [items]="device_model_list"
+          bindLabel="display_text"
+          bindValue="display_text"
+          [addTag]="addDeviceModel"
+          [(ngModel)]="device.model"
+          appearance="outline"
+          placeholder="Model"
+          name="device_model"
+          required
+        >
+        </ng-select>
+      </div>
+      <div class="col-md-6 px-2">
+        <ng-select
+          [items]="device_type_list"
+          bindLabel="display_text"
+          bindValue="display_text"
+          [addTag]="addDeviceType"
+          [(ngModel)]="device.type"
+          appearance="outline"
+          placeholder="Type"
+          name="device_type"
+          required
+        >
+        </ng-select>
+      </div>
+
+      <mat-form-field appearance="outline" class="col-md-6 px-2 pt-1">
+        <mat-label>{{ "Barcode" | translate }}</mat-label>
+        <input
+          style="padding-top: 5px; padding-bottom: 5px"
+          matInput
+          [placeholder]="'Barcode' | translate"
+          [(ngModel)]="device.barcode"
+          name="barcode"
+          [customValidator]="validator_service.emptyString"
+          #barcode="ngModel"
+          required
+        />
+        <mat-error
+          *ngIf="!barcode.hasError('required') && barcode.hasError('invalid')"
+        >
+          invalid input
+        </mat-error>
+      </mat-form-field>
+
+      <div class="mb-3 pl-2 col-md-12 col-12 d-flex align-items-center">
+        <mat-checkbox
+          name="Auto_doc_enabled"
+          [(ngModel)]="device.auto_doc_enabled"
+        >
+          {{ "Auto Documentation" | translate }}
+        </mat-checkbox>
+        <mat-checkbox
+          class="ml-5"
+          name="Auto_program_enabled"
+          [(ngModel)]="device.auto_program_enabled"
+        >
+          {{ "Auto Programming" | translate }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </mat-card>
+</form>

@@ -1,0 +1,20 @@
+#error-page-content {
+    width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10%;
+  }
+  #error-page-content h1 {
+    font-family: 'oswald';
+    font-size: 150px;
+    font-weight: bold;
+    color: #e82a62;
+    margin: 0;
+  }
+  #error-page-content p a {
+    color: #e82a62;
+  }
+  #error-page-content p a:hover,
+  #error-page-content p a:focus {
+    text-decoration: underline;
+  }
